@@ -1,0 +1,141 @@
+/* StudyConnect - Hệ thống nhận diện giao diện UI Kit & Styles */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+
+:root {
+  --primary: #2563EB;        /* Xanh Azure học thuật */
+  --primary-hover: #1D4ED8;
+  --primary-light: #EFF6FF;
+  --accent: #F59E0B;         /* Cam Hạt dẻ / Amber */
+  --accent-hover: #D97706;
+  --accent-light: #FEF3C7;
+  --bg-main: #F8FAFC;        /* Xám Slate nhạt dịu mắt */
+  --text-main: #0F172A;      /* Xanh đen Slate */
+  --text-muted: #64748B;
+  --border-color: #E2E8F0;
+  --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+  --card-hover-shadow: 0 20px 30px -10px rgba(37, 99, 235, 0.12), 0 10px 15px -5px rgba(15, 23, 42, 0.05);
+}
+
+body {
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Gradients */
+.gradient-brand {
+  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #F59E0B 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
+}
+
+.gradient-banner {
+  background: linear-gradient(135deg, #1E40AF 0%, #2563EB 60%, #3B82F6 100%);
+}
+
+.gradient-step {
+  background: linear-gradient(90deg, #2563EB 0%, #8B5CF6 50%, #F59E0B 100%);
+}
+
+/* Animations */
+@keyframes bounceSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-bounce-slow {
+  animation: bounceSlow 3s infinite ease-in-out;
+}
+
+@keyframes pulseSubtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.02); }
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 2.5s infinite ease-in-out;
+}
+
+/* Card hover transitions */
+.doc-card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #E2E8F0;
+  box-shadow: var(--card-shadow);
+}
+
+.doc-card:hover {
+  transform: translateY(-4px);
+  border-color: #BFDBFE;
+  box-shadow: var(--card-hover-shadow);
+}
+
+/* 7-step tracker node styles */
+.step-node.completed {
+  border-color: #10B981;
+  background-color: #ECFDF5;
+  color: #059669;
+}
+
+.step-node.active {
+  border-color: #2563EB;
+  background-color: #EFF6FF;
+  color: #2563EB;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+.step-node.pending {
+  border-color: #CBD5E1;
+  background-color: #F8FAFC;
+  color: #94A3B8;
+}
+
+/* Glassmorphism elements */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Badges */
+.badge-verified {
+  background-color: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.badge-hot {
+  background-color: #FEF3C7;
+  color: #B45309;
+  border: 1px solid #FDE68A;
+}
+
+.badge-vip {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+
+/* Mobile Safe Areas */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
