@@ -148,7 +148,7 @@
         <div class="max-w-5xl mx-auto space-y-8">
           
           <!-- Hero Header with Mascot Side-by-Side -->
-          <div class="flex flex-col md:flex-row items-center justify-center gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto text-center md:text-left">
+          <div class="flex flex-col md:flex-row items-center justify-center gap-6 sm:gap-8 max-w-5xl mx-auto text-center md:text-left">
             <!-- Mascot standing proud beside title -->
             <div class="relative flex-shrink-0 animate-bounce-slow">
               <!-- Ambient radial glow behind squirrel -->
@@ -156,25 +156,27 @@
               <img 
                 src="assets/mascot.png" 
                 alt="Linh vật Sóc USSH ôm Hạt dẻ" 
-                class="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 object-contain filter drop-shadow-xl"
+                class="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 lg:w-44 lg:h-44 object-contain filter drop-shadow-xl"
               >
             </div>
 
             <!-- Title & subtitle block -->
-            <div class="space-y-3">
+            <div class="space-y-3 flex-1 min-w-0">
               <div class="inline-flex items-center space-x-2 bg-blue-100/80 text-blue-800 px-3.5 py-1 rounded-full text-xs font-semibold shadow-xs">
                 <span class="w-2 h-2 rounded-full bg-blue-600 animate-ping"></span>
                 <span>Học kỳ 2026.1: Cập nhật 1.500+ đề thi & đề cương mới nhất</span>
               </div>
 
               <!-- Main Heading with Mascot Integration -->
-              <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight sm:leading-tight">
-                Kho Học Liệu Đại Học <br class="hidden sm:inline"> Bản Địa Hóa <br>
-                <span class="bg-gradient-to-r from-blue-600 to-amber-500 bg-clip-text text-transparent">Kiểm Duyệt 7 Bước Chuẩn Mực</span>
+              <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-extrabold text-slate-900 tracking-tight leading-snug sm:leading-tight">
+                <span>Kho Học Liệu Đại Học Bản Địa Hóa</span>
+                <span class="block mt-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-amber-500 bg-clip-text text-transparent">
+                  Kiểm Duyệt 7 Bước <span class="whitespace-nowrap">Chuẩn Mực</span>
+                </span>
               </h1>
 
               <!-- Subtitle -->
-              <p class="text-sm sm:text-base text-slate-600 max-w-xl leading-relaxed">
+              <p class="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
                 Chấm dứt nỗi lo tài liệu sai lệch, trôi nổi và lỗi phông chữ. StudyConnect cung cấp ngân hàng học liệu đã qua xác thực AI & chuyên gia, tích hợp ví thưởng <strong>Hạt dẻ</strong> và <strong>NotebookLM AI tóm tắt</strong>.
               </p>
             </div>
@@ -1242,6 +1244,13 @@
       <span class="mt-2 sm:mt-0">Thiết kế Mobile-First • Tối ưu màn hình di động >75%</span>
     </div>
   </footer>
+
+  <!-- Firebase SDKs (Compat version for pure browser runtime without bundler) -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
 
   <!-- App Script -->
   <script src="app.js"></script>

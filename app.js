@@ -1099,6 +1099,29 @@ function setupAuth() {
   document.querySelectorAll('[data-close-auth]').forEach(btn => {
     btn.addEventListener('click', closeAuthModal);
   });
+
+  // Listen for Firebase Auth state changes
+  if (window.firebaseAuth) {
+    try {
+      window.firebaseAuth.onAuthStateChanged((user) => {
+        if (user) {
+          state.auth.isLoggedIn = true;
+          state.user.email = user.email || '';
+          const detected = detectUniversityFromEmail(state.user.email);
+          state.user.name = user.displayName || user.email.split('@')[0] || ('Sinh viên ' + detected.short);
+          state.user.university = detected.name;
+          state.user.role = 'Sinh viên ' + detected.short;
+          state.user.chestnuts = 165;
+          state.user.levelTitle = 'Sóc Chăm Học (Bạc)';
+          renderHeaderUser();
+          renderGamification();
+          updateDownloadModalButton();
+        }
+      });
+    } catch (err) {
+      console.warn('Firebase Auth listener:', err);
+    }
+  }
 }
 
 function detectUniversityFromEmail(email) {
@@ -1160,12 +1183,14 @@ window.switchAuthTab = function(mode) {
   initIcons();
 };
 
-window.handleAuthSubmit = function(e) {
+window.handleAuthSubmit = async function(e) {
   e.preventDefault();
   const emailInput = document.getElementById('auth-email-input');
   const nameInput = document.getElementById('auth-name-input');
   const roleInput = document.getElementById('auth-role-input');
+  const passwordInput = document.getElementById('auth-password-input');
   const email = emailInput.value.trim().toLowerCase();
+  const password = passwordInput ? passwordInput.value : '';
 
   if (!email.endsWith('.edu.vn')) {
     showToast('Lỗi: Địa chỉ email bắt buộc phải có đuôi .edu.vn được cấp bởi trường Đại học!', 'warning');
@@ -1173,13 +1198,49 @@ window.handleAuthSubmit = function(e) {
   }
 
   const detectedUni = detectUniversityFromEmail(email);
+  const fullName = (nameInput && nameInput.value.trim()) || ('Sinh viên ' + detectedUni.short);
 
+  // Attempt Firebase Auth if configured and password provided
+  if (window.firebaseAuth && password.length >= 6) {
+    try {
+      if (state.auth.mode === 'register') {
+        const userCred = await window.firebaseAuth.createUserWithEmailAndPassword(email, password);
+        if (userCred.user && fullName) {
+          await userCred.user.updateProfile({ displayName: fullName });
+        }
+        showToast(`Firebase: Đăng ký thành công tài khoản ${detectedUni.short} (.edu.vn)!`, 'success');
+      } else {
+        await window.firebaseAuth.signInWithEmailAndPassword(email, password);
+        showToast(`Firebase: Đăng nhập thành công với tài khoản ${email}!`, 'success');
+      }
+      closeAuthModal();
+      return;
+    } catch (fbErr) {
+      console.warn('Firebase Auth note:', fbErr.code, fbErr.message);
+      if (fbErr.code === 'auth/wrong-password') {
+        showToast('Mật khẩu không chính xác, vui lòng thử lại!', 'warning');
+        return;
+      } else if (fbErr.code === 'auth/email-already-in-use') {
+        showToast('Email này đã được đăng ký, chuyển sang tab Đăng nhập!', 'info');
+        switchAuthTab('login');
+        return;
+      } else if (fbErr.code === 'auth/user-not-found') {
+        showToast('Tài khoản chưa tồn tại, chuyển sang tab Đăng ký!', 'info');
+        switchAuthTab('register');
+        return;
+      }
+      // If Email/Password provider isn't activated yet in Firebase Console, fallback gracefully
+      showToast(`Chế độ kết nối: ${fbErr.code ? 'Đang dùng xác thực cục bộ' : 'Đăng nhập thành công'}`, 'info');
+    }
+  }
+
+  // Active session state
   state.auth.isLoggedIn = true;
   state.user.email = email;
   state.user.university = detectedUni.name;
 
   if (state.auth.mode === 'register') {
-    state.user.name = (nameInput && nameInput.value.trim()) || ('Sinh viên ' + detectedUni.short);
+    state.user.name = fullName;
     const roleLabels = {
       student: 'Sinh viên / Học sinh',
       club: 'Đại diện CLB học thuật / Đoàn - Hội',
@@ -1187,7 +1248,8 @@ window.handleAuthSubmit = function(e) {
       library: 'Cán bộ Thư viện trường'
     };
     state.user.role = roleLabels[roleInput?.value] || 'Sinh viên';
-    state.user.chestnuts += 50; // Welcome reward
+    state.user.chestnuts = 50; // Welcome reward
+    state.user.levelTitle = 'Sóc Chăm Học (Bạc)';
     showToast(`Đăng ký thành công tài khoản ${detectedUni.short} (.edu.vn)! Nhận ngay +50 Hạt dẻ chào mừng.`, 'success');
   } else {
     const rawPrefix = email.split('@')[0].replace(/[._0-9]/g, ' ').trim();
@@ -1205,7 +1267,21 @@ window.handleAuthSubmit = function(e) {
   updateDownloadModalButton();
 };
 
-window.handleGoogleEduLogin = function() {
+window.handleGoogleEduLogin = async function() {
+  if (window.firebaseAuth && typeof firebase !== 'undefined' && firebase.auth && firebase.auth.GoogleAuthProvider) {
+    try {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      const result = await window.firebaseAuth.signInWithPopup(provider);
+      const user = result.user;
+      showToast(`Firebase Google: Đăng nhập thành công ${user.email}!`, 'success');
+      closeAuthModal();
+      return;
+    } catch (err) {
+      console.warn('Google Provider in Firebase Console not enabled yet or closed:', err);
+    }
+  }
+
+  // Fallback demo simulation for quick testing
   state.auth.isLoggedIn = true;
   state.user.name = 'Lê Phương Anh';
   state.user.email = 'phuonganh.le@ussh.edu.vn';
@@ -1221,6 +1297,13 @@ window.handleGoogleEduLogin = function() {
 };
 
 window.handleLogout = function() {
+  if (window.firebaseAuth) {
+    try {
+      window.firebaseAuth.signOut();
+    } catch (e) {
+      console.warn(e);
+    }
+  }
   state.auth.isLoggedIn = false;
   state.user.name = '';
   state.user.email = '';
