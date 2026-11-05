@@ -29,6 +29,7 @@ Theo tài liệu định hướng giao diện từ thẻ `giao diện`:
   - *Tầng 3 (Giảng viên / Chuyên gia):* Huy hiệu Verified kiểm duyệt chuyên môn, thẩm định học thuật.
   - *Tầng 4 (Thư viện trường):* Quản lý lượng lớn học liệu số hóa chính thống.
 - **Hỗ trợ Single Sign-On (SSO):** Tích hợp nút đăng nhập 1-click qua **Google Workspace for Education**.
+- **Tích hợp Firebase Authentication & Analytics:** Đã cấu hình kết nối trực tiếp với dự án Firebase `study-connect-2daf8` thông qua file `firebase-config.js` để lưu trữ người dùng và theo dõi lưu lượng truy cập qua Google Analytics `G-SZ6XYDGPB0`.
 
 ### 2. Trang Chủ (Homepage & Hero Search)
 - Thanh tìm kiếm trung tâm hỗ trợ tìm theo từ khóa, mã môn học (vd: `MI1111`, `ECO101`, `LAW101`...) và tên trường.

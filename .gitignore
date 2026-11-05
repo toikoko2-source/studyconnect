@@ -1,0 +1,5 @@
+# Ignore temporary/server scripts if not needed
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
